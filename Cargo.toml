@@ -1,0 +1,40 @@
+[package]
+name = "el-gallo-zoom"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "ELGalloZoom (EGZ) - Smooth desktop magnification & spotlight for Windows 11 and macOS"
+build = "build.rs"
+
+[[bin]]
+name = "el-gallo-zoom"
+path = "src/main.rs"
+
+[dependencies]
+eframe = "0.29"
+egui = "0.29"
+tray-icon = "0.19"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+directories = "5.0"
+image = { version = "0.25", default-features = false, features = ["ico", "png", "jpeg"] }
+
+[target.'cfg(target_os = "windows")'.dependencies.windows]
+version = "0.58"
+features = [
+    "Win32_Foundation",
+    "Win32_UI_Magnification",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_HiDpi",
+    "Win32_Graphics_Gdi",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+]
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+winres = "0.1"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+libc = "0.2"
+objc = "0.2"

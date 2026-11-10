@@ -1,0 +1,36 @@
+name: Build Windows EXE & macOS DMG
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build Windows Release
+        run: cargo build --release
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: ELGalloZoom-Windows-x64
+          path: target/release/el-gallo-zoom.exe
+
+  build-macos-dmg:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build macOS .app and .dmg
+        run: |
+          chmod +x scripts/build_macos_dmg.sh
+          ./scripts/build_macos_dmg.sh
+      - name: Upload macOS DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: ELGalloZoom-macOS-DMG
+          path: target/release/ELGalloZoom.dmg
+
